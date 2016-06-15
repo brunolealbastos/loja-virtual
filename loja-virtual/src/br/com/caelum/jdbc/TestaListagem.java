@@ -8,26 +8,27 @@ import java.sql.Statement;
 
 public class TestaListagem {
 	public static void main(String[] args) throws SQLException {
-		String nome = "Notebook - Teste";
+		//Campos da tabela
+		String nome = "Notebook";
 		String descricao = "Notebook i5";
+		//SQL
 		String sql = "insert into Produto (nome, descricao) values ('" + nome + "', '" + descricao + "')"; 
 		
+		// Faz conexão com o banco através de um driver específico
 		Connection connection = Database.getConnection();
 		
+		
 		Statement statement = connection.createStatement();
-		boolean resultado = statement.execute(sql);
-		System.out.println(resultado);
-		//ResultSet resultSet = statement.getResultSet();
+		boolean resultado = statement.execute(sql, statement.RETURN_GENERATED_KEYS);		
+		ResultSet resultSet = statement.getGeneratedKeys();
 		
-		/*while (resultSet.next()){
-			int id = resultSet.getInt("id");
-			String nome = resultSet.getString("nome");
-			String descricao = resultSet.getString("descricao");
+		while (resultSet.next()){
+			String id = resultSet.getString("id");			
 			
-			System.out.println("#ID: "+ id + " #Nome: "+ nome+ " #Descricao: "+ descricao);
-		}*/
+			System.out.println(id + " gerado");
+		}
 		
-		//resultSet.close();
+		resultSet.close();
 		statement.close();
 		
 		connection.close();
